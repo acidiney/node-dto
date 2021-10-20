@@ -1,4 +1,6 @@
 # Node Dto
+[![Node.js Package](https://github.com/acidiney/node-dto/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/acidiney/node-dto/actions/workflows/npm-publish.yml)
+[![CircleCI](https://circleci.com/gh/acidiney/node-dto/tree/master.svg?style=svg)](https://circleci.com/gh/acidiney/node-dto/tree/master)
 
 Node Dto is a small lib, that help developer to create dto's using javascript.
 
