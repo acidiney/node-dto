@@ -1,14 +1,21 @@
 {
-  "name": "nodejs-dto",
+  "name": "node-dto",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "mocha --report spec"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "node-dto",
+    "dto",
+    "nodejs",
+    "javascript",
+    "data transfer object",
+    "node-package"
+  ],
+  "author": "Acidiney Dias <acidineydias@gmail.com>",
+  "license": "MIT",
   "devDependencies": {
     "chai": "^4.3.4",
     "mocha": "^9.1.3"
