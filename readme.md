@@ -17,8 +17,7 @@ $ npm i node-dto
 
 
 
-### entries()
-The 
+- entries()
 - validate(payload: Object)
 - export(payload: Object | Object[])
 - exportUsingSQL(entity | null)
