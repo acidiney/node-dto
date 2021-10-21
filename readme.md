@@ -16,7 +16,7 @@ $ npm i node-dto
 The `node-dto` package exports `MakeDto` function, that is a factory to generate your custom `Dto's`.
 
 The `MakeDto` function receive an array of object with this schema:
-```json
+```
 {
   name: String,
   serialize: String,
@@ -227,7 +227,7 @@ CreateUserDto.export([
 ```
 
 Returns:
-```json
+```
 
 {
   firstName: 'Acidiney',
@@ -239,7 +239,7 @@ Returns:
 
 Or
 
-```json
+```
 
 [
   {
