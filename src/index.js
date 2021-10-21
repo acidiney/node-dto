@@ -20,6 +20,15 @@ function validateSchema(params) {
         throw new ValidateException(`Prop ${key} is missing on schema index ${i}!`);
     }
   }
+
+  const availableTypes = Object.keys(AvailableTypes);
+  const types = params.map((dt) => dt.type);
+
+  types.forEach((type) => {
+    if (!availableTypes.includes(type)) {
+      throw new ValidateException(`${type} was not recognized!`);
+    }
+  });
 }
 /**
  *
@@ -60,20 +69,7 @@ module.exports = {
    */
   MakeDto: (params) => {
     validateSchema(params);
-
-    const availableTypes = Object.keys(AvailableTypes);
-
     const dto = params;
-
-    (() => {
-      const types = dto.map((dt) => dt.type);
-
-      types.forEach((type) => {
-        if (!availableTypes.includes(type)) {
-          throw new ValidateException(`${type} not recognized!`);
-        }
-      });
-    })();
 
     return {
       /**
