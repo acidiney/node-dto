@@ -149,14 +149,9 @@ module.exports = {
             }`
           );
         }
-<<<<<<< HEAD
 
         return sql;
       },
     };
   },
 };
-=======
-    }
-}
->>>>>>> 1fb6beaf81dc6eee7b1bbbb52de1b2b964a71695
