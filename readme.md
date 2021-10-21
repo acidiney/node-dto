@@ -136,7 +136,7 @@ CreateUserDto.validate({
 ```
 
 Returns:
-```json
+```
 
 {
   first_name: 'Acidiney',
@@ -228,7 +228,6 @@ CreateUserDto.export([
 
 Returns:
 ```
-
 {
   firstName: 'Acidiney',
   lastName: 'Dias',
