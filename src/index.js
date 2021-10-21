@@ -55,7 +55,7 @@ function validateLine(entry, data) {
         `Field ${entry.name} with value ${data}, is not typeof ${entry.type}!`
     );
 
-  return typeof result !== "boolean" ? result : data
+  return typeof result !== 'boolean' ? result : data
 }
 
 module.exports = {

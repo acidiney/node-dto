@@ -24,6 +24,7 @@ The `MakeDto` function receive an array of object with this schema:
   required: Boolean
 }
 ```
+Note: For type `Number` validator parses to Number Type in javascript check issue [Add Number Parsing for Number type](https://github.com/acidiney/node-dto/issues/6)
 
 ## Name
 
