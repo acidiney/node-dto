@@ -227,7 +227,7 @@ describe('nodejs-dto', () => {
     expect(dto.validate(requestProps)).to.deep.equal(props);
   });
 
-  it('should throw a error when pass a wrong value after validate a dto type [Enum]', () => {
+  it('should throw an error when pass a wrong value after validate a dto type [Enum]', () => {
     const dto = MakeDto([
       {
         name: 'status',

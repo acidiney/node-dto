@@ -38,7 +38,7 @@ function validateLine(entry, data) {
   if (entry.required && !data)
     throw new ValidateException(`Field ${entry.name} is required!`)
   
-  // Ignore type checking if don't have data and it's not required
+  // Ignore type checking if doesn't have data and not required
   if (!entry.required && !data) return null
 
   // Checking type
