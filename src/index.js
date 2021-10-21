@@ -30,7 +30,7 @@ function validateLine(entry, data) {
 
 /**
  *
- * @Author Acidiney Dias <acidiney.dias@ideiasdinamicas.com>
+ * @Author Acidiney Dias <acidineydias@gmail.com>
  *
  * @param {Object[]} params
  * @param {String} params.name
