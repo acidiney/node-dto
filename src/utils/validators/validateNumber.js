@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  *
  * @type {{validateNumber: ((function(*=): (boolean|number))|*)}}

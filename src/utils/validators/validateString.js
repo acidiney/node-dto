@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  *
  * @type {{validateString: (function(*=): boolean)}}

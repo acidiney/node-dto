@@ -1,6 +1,5 @@
 'use strict';
 
-const AvailableTypes = require('../types')
 const ValidateException = require('../../exceptions/ValidateException');
 
 /**
@@ -11,17 +10,17 @@ module.exports = {
     /**
      *
      * @param {object[]} array
-     * @param {AvailableTypes} itemType
+     * @param {string} validateFn
+     * @param {string} validateKey
      */
-    validateArray: (array, itemType = null) => {
-        if (!itemType) {
+    validateArray: (array, validateFn = null, validateKey = null) => {
+        if (!validateFn) {
             if (!(array instanceof Array))
                 throw new ValidateException('Schema need to be an array');
             return
         }
 
-        const validateFn = AvailableTypes[itemType];
         if (!array.every((p) => validateFn(p)))
-            throw new ValidateException(`Schema need to be an array of ${itemType}`);
+            throw new ValidateException(`Schema need to be an array of ${validateKey}`);
     }
 }

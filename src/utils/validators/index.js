@@ -1,3 +1,5 @@
+'use strict';
+
 const { validateEnum } = require('./validateEnum');
 const { validateArray } = require('./validateArray');
 const { validateBoolean } = require('./validateBoolean');

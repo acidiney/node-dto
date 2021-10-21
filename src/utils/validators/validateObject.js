@@ -1,7 +1,9 @@
+'use strict';
+
 /**
  *
  * @type {{validateObject: (function(*): boolean)}}
  */
 module.exports = {
-    validateObject: (obj) => obj instanceof Object
+    validateObject: (obj) => typeof obj === 'object'
 }

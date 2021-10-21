@@ -1,18 +1,18 @@
 'use strict';
 
+const schema = require('./utils/propsSchema')
 const AvailableTypes = require('./utils/types');
 const ValidateException = require('./exceptions/ValidateException');
 const { validateEnum, validateArray} = require('./utils/validators')
 
 function validateSchema(params) {
   validateArray(params)
-  validateArray(params, 'Object');
+  validateArray(params, AvailableTypes.Object, 'Object');
 
   for (let i = 0; i < params.length; i++) {
 
     const row = params[i]
     const keys = Object.keys(row);
-    const schema = ['name', 'serialize', 'required', 'type'];
 
     for (const key of schema) {
       validateEnum(key, keys, `Prop ${key} is missing on schema index ${i}!`)
