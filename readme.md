@@ -204,8 +204,8 @@ Comes:
 ```js
 
 CreateUserDto.export({
-  firstName: 'Acidiney',
-  lastName: 'Dias',
+  first_name: 'Acidiney',
+  last_name: 'Dias',
   email: 'acidineydias@gmail.com'
 })
 
