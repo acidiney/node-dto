@@ -19,6 +19,16 @@ describe('nodejs-dto', () => {
     expect(() => MakeDto('Trash')).to.throw();
   });
 
+  it('shoud throws an error when props is missing', () => {
+    expect(() =>
+      MakeDto({
+        name: 'testName',
+        serialize: 'name',
+        required: true,
+      })
+    ).to.throw();
+  })
+
   it('should not accept valid type [Image]', () => {
     expect(() =>
       MakeDto([

@@ -3,6 +3,24 @@
 const AvailableTypes = require('./utils/types');
 const ValidateException = require('./exceptions/ValidateException');
 
+function validateSchema(params) {
+  if (!(params instanceof Array))
+    throw new ValidateException('Schema need to be an array');
+
+  if (!params.every((p) => p instanceof Object))
+    throw new ValidateException('Schema need to be an array of objects');
+
+  for (let i = 0; i < params.length; i++) {
+
+    const row = params[i]
+    const keys = Object.keys(row);
+
+    for (const key of ['name', 'serialize', 'required', 'type']) {
+      if (!keys.includes(key))
+        throw new ValidateException(`Prop ${key} is missing on schema index ${i}!`);
+    }
+  }
+}
 /**
  *
  * @param entry
@@ -41,8 +59,7 @@ module.exports = {
    * @constructor
    */
   MakeDto: (params) => {
-    if (!(params instanceof Array))
-      throw new Error('schema need to be an array');
+    validateSchema(params);
 
     const availableTypes = Object.keys(AvailableTypes);
 
