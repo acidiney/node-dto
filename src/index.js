@@ -45,7 +45,7 @@ function validateLine(entry, data) {
         `Field ${entry.name} with value ${data}, is not typeof ${entry.type}!`
     );
 
-  if (!entry.required) return null;
+  if (!entry.required && !data) return null;
 
   const result = AvailableTypes[entry.type](data);
 
