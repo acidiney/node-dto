@@ -12,21 +12,23 @@ describe('nodejs-dto', () => {
         type: 'Image',
         required: true,
       })
-    ).to.throw();
+    ).to.throw('Schema need to be an array');
 
-    expect(() => MakeDto()).to.throw();
+    expect(() => MakeDto()).to.throw('Schema need to be an array');
 
-    expect(() => MakeDto('Trash')).to.throw();
+    expect(() => MakeDto(['trash'])).to.throw('Schema need to be an array of Object');
   });
 
   it('shoud throws an error when props is missing', () => {
     expect(() =>
-      MakeDto({
-        name: 'testName',
-        serialize: 'name',
-        required: true,
-      })
-    ).to.throw();
+      MakeDto([
+        {
+          name: 'testName',
+          serialize: 'name',
+          required: true,
+        }
+      ])
+    ).to.throw('Prop type is missing on schema index 0');
   })
 
   it('should not accept valid type [Image]', () => {
@@ -39,7 +41,7 @@ describe('nodejs-dto', () => {
           required: true,
         },
       ])
-    ).to.throw();
+    ).to.throw('Image was not recognized!');
   });
 
   it('should throws error when required field is not filled', () => {
@@ -56,7 +58,7 @@ describe('nodejs-dto', () => {
       dto.validate({
         age: null,
       })
-    ).to.throw();
+    ).to.throw('Field age is required!');
   });
 
   it('shoud throws an error when pass a different type of value', () => {
@@ -178,4 +180,28 @@ describe('nodejs-dto', () => {
       'users.name as Name',
     ]);
   });
+
+  it('should parse result of validate, need to Number', () => {
+    const dto = MakeDto([
+      {
+        name: 'Age',
+        serialize: 'age',
+        type: 'Number',
+        required: true,
+      },
+    ]);
+
+    expect(dto.validate({
+      Age: '123'
+    })).to.deep.equal({
+      age: 123
+    });
+
+
+    expect(dto.validate({
+      Age: '1e3'
+    })).to.deep.equal({
+      age: 1000
+    });
+  })
 });
