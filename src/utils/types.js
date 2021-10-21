@@ -1,13 +1,10 @@
 'use strict';
-
-const validateNumber = (value) => typeof value === 'number'
-const validateString = (value) => typeof value === 'string'
-const validateDate = (value) => value instanceof Date;
-const validateBoolean = (value) => typeof value === 'boolean'
+const { validateString, validateNumber, validateBoolean, validateDate, validateObject } = require('./validators')
 
 module.exports = {
     String: validateString,
     Number: validateNumber,
     Date: validateDate,
-    Boolean: validateBoolean
+    Boolean: validateBoolean,
+    Object: validateObject
 }

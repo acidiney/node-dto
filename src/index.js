@@ -2,22 +2,20 @@
 
 const AvailableTypes = require('./utils/types');
 const ValidateException = require('./exceptions/ValidateException');
+const { validateEnum, validateArray} = require('./utils/validators')
 
 function validateSchema(params) {
-  if (!(params instanceof Array))
-    throw new ValidateException('Schema need to be an array');
-
-  if (!params.every((p) => p instanceof Object))
-    throw new ValidateException('Schema need to be an array of objects');
+  validateArray(params)
+  validateArray(params, 'Object');
 
   for (let i = 0; i < params.length; i++) {
 
     const row = params[i]
     const keys = Object.keys(row);
+    const schema = ['name', 'serialize', 'required', 'type'];
 
-    for (const key of ['name', 'serialize', 'required', 'type']) {
-      if (!keys.includes(key))
-        throw new ValidateException(`Prop ${key} is missing on schema index ${i}!`);
+    for (const key of schema) {
+      validateEnum(key, keys, `Prop ${key} is missing on schema index ${i}!`)
     }
   }
 
@@ -37,21 +35,21 @@ function validateSchema(params) {
  * @returns {null|boolean|*}
  */
 function validateLine(entry, data) {
-  if (entry.required) {
-    if (AvailableTypes[entry.type](data) && typeof data !== 'undefined') {
-      return data;
-    }
+  if (entry.required && !data)
+      throw new ValidateException(
+          `Field ${entry.name} is required!`
+      );
 
-    return false;
-  }
+  if (data && !AvailableTypes[entry.type](data))
+    throw new ValidateException(
+        `Field ${entry.name} with value ${data}, is not typeof ${entry.type}!`
+    );
 
-  if (typeof data === 'undefined') return null;
+  if (!entry.required) return null;
 
-  if (AvailableTypes[entry.type](data)) {
-    return data;
-  }
+  const result = AvailableTypes[entry.type](data);
 
-  return false;
+  return typeof result !== 'boolean' ? result : data
 }
 
 module.exports = {
@@ -83,14 +81,7 @@ module.exports = {
         for (const entry of dto) {
           for (const key of keys) {
             if (entry.name === key) {
-              const response = validateLine(entry, input[key]);
-
-              if (typeof response === 'boolean')
-                throw new ValidateException(
-                  `Field ${entry.name} with value ${input[key]}, is not typeof ${entry.type}!`
-                );
-
-              validated[entry.serialize] = response;
+              validated[entry.serialize] = validateLine(entry, input[key]);
             }
           }
         }
