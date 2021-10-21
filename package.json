@@ -1,6 +1,6 @@
 {
   "name": "node-dto",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A small dto lib for nodejs",
   "main": "src/index.js",
   "scripts": {
