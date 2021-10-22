@@ -18,6 +18,7 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.3.4",
+    "git-commit-msg-linter": "^3.2.8",
     "mocha": "^9.1.3"
   },
   "dependencies": {
