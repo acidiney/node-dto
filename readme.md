@@ -20,7 +20,7 @@ The `MakeDto` function receive an array of object with this schema:
 {
   name: String,
   serialize: String,
-  type: 'Number' | 'String' | 'Date' | 'Boolean' | 'Enum',
+  type: 'Number' | 'String' | 'Date' | 'Boolean' | 'Enum' | 'Object',
   required: Boolean
 }
 ```
@@ -40,6 +40,31 @@ MakeDto([
     required: true,
     type: 'Enum',
     enumOps: ['pending', 'approved', 'rejected']
+  }
+]
+```
+
+#### Object
+
+For `Object` type you need to pass a `schema` array of object props. The `schema` prop follow the same interface that `MakeDto` exports.
+
+Eg-
+
+```js
+MakeDto([
+  {
+    name: 'fields',
+    serialize: 'fields',
+    required: true,
+    type: 'Object',
+    schema: [
+      {
+        name: 'Name',
+        serialize: 'name',
+        required: true,
+        type: 'Number',
+      }
+    ]
   }
 ]
 ```
