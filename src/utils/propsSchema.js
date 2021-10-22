@@ -1,1 +1,1 @@
-module.exports = ['name', 'serialize', 'required', 'type'];
+module.exports = ['name', 'serialize','required', 'type','defaultValue'];

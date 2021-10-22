@@ -8,13 +8,19 @@ const { validateEnum, validateArray } = require('./utils/validators');
 function validateSchema(params) {
   validateArray(params);
   validateArray(params, AvailableTypes.Object, 'Object');
-
   for (let i = 0; i < params.length; i++) {
     const row = params[i];
+    console.log(row)
     const keys = Object.keys(row);
+      if((typeof row['defaultValue']).toLowerCase()!==row['type'].toLowerCase()){
+        throw new ValidateException(
+        `Value of the Field defaultValue is not of the same type 
+          as the value given in field type on schema index ${i}!`
+        );
+      } 
 
     for (const key of schema) {
-      validateEnum(key, keys, `Prop ${key} is missing on schema index ${i}!`);
+      validateEnum(key, keys, `Prop ${key} is missing on schema index ${i} !`);
     }
   }
 
@@ -39,7 +45,6 @@ function validateLine(entry, data, index = null) {
     throw new ValidateException(
       `Field ${entry.name} is required${index ? ` - on index #${index}` : ''}!`
     );
-
   if (data && !AvailableTypes[entry.type](data))
     throw new ValidateException(
       `Field ${entry.name} with value ${data}, is not typeof ${entry.type}${
@@ -57,22 +62,22 @@ function validateLine(entry, data, index = null) {
 function _validate(input, dto, index = null) {
   const keys = Object.keys(input);
   const validated = {};
-
   const requiredProps = dto.filter((d) => d.required).map((d) => d.name);
-
   requiredProps.forEach((prop) => {
-    if (!keys.includes(prop)) {
+    if(!keys.includes(prop)) {
       throw new ValidateException(
         `Field ${prop} is required${
           typeof index !== 'undefined' ? ` - on index #${index}` : ''
         }!`
       );
     }
-  });
-
+  }
+  );
+  
   for (const entry of dto) {
     for (const key of keys) {
       if (entry.name === key) {
+        if(!input[key]){input[key]=entry.defaultValue}
         validated[entry.serialize] = validateLine(entry, input[key], index);
       }
     }
