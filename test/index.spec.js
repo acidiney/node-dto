@@ -28,7 +28,7 @@ describe('nodejs-dto', () => {
           required: true,
         }
       ])
-    ).to.throw('Prop type is missing on schema index 0');
+    ).to.throw('Prop \'type\' is missing on schema index 0');
   })
 
   it('should not accept valid type [Image]', () => {
@@ -205,6 +205,29 @@ describe('nodejs-dto', () => {
     });
   })
 
+  it('should throws an error when select type \'Enum\' but enumOps is not founded', () => {
+    expect(() => MakeDto([
+      {
+        name: 'status',
+        type: 'Enum',
+        serialize: 'status',
+        required: true,
+      }
+    ])).to.throws('Prop \'enumOps\' is required when you choose type \'Enum\'!')
+  })
+
+  it('should throws an error when select type \'Enum\' but enumOps length is 0', () => {
+    expect(() => MakeDto([
+      {
+        name: 'status',
+        type: 'Enum',
+        serialize: 'status',
+        enumOps: [],
+        required: true,
+      }
+    ])).to.throws('Prop \'enumOps\' is required when you choose type \'Enum\'!')
+  })
+
   it('should success to validate a dto type [Enum]', () => {
     const dto = MakeDto([
       {
@@ -246,6 +269,7 @@ describe('nodejs-dto', () => {
       "Value canceled don't exists on enum approved,pending,rejected!"
     );
   });
+
   it ('should validate an array, and throws an error on index 1', () => {
     const dto = MakeDto([
       {
@@ -302,4 +326,71 @@ describe('nodejs-dto', () => {
     ])).to.throw('Field Age is required - on index #1!')
 
   })
+
+  it('should throws an error when select type \'Object\' but schema is not filled', () => {
+      expect(() => MakeDto([
+        {
+          name: 'fields',
+          type: 'Object',
+          serialize: 'fields',
+          required: true,
+        }
+      ])).to.throws('Prop \'schema\' is required when you choose type \'Object\'!')
+  })
+
+  it('should throws an error when select type \'Object\' but schema length is 0', () => {
+    expect(() => MakeDto([
+      {
+        name: 'fields',
+        type: 'Object',
+        serialize: 'fields',
+        schema: [],
+        required: true,
+      }
+    ])).to.throws('Prop \'schema\' is required when you choose type \'Object\'!')
+  })
+
+  it('should accept an object as a type with an schema of props to validate', () => {
+
+    const dto = MakeDto([
+      {
+        name: 'fields',
+        type: 'Object',
+        serialize: 'fields',
+        required: true,
+        schema: [
+          {
+            name: 'Name',
+            serialize: 'name',
+            required: true,
+            type: 'String'
+          },
+          {
+            name: 'Type',
+            serialize: 'type',
+            type: 'Enum',
+            required: true,
+            enumOps: ['number', 'array'],
+          }
+        ]
+      }
+    ])
+
+    const requestProps = {
+      fields: {
+        Name: 'min',
+        Type: 'number'
+      }
+    }
+
+    const expectOutput = {
+      fields: {
+        name: 'min',
+        type: 'number'
+      }
+    }
+
+    expect(dto.validate(requestProps)).to.deep.equal(expectOutput)
+  })
+
 });

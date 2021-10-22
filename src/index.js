@@ -5,6 +5,12 @@ const AvailableTypes = require('./utils/types');
 const ValidateException = require('./exceptions/ValidateException');
 const { validateEnum, validateArray } = require('./utils/validators');
 
+const exceptionTypes = {
+  Enum: 'Enum',
+  Array: 'Array',
+  Object: 'Object'
+}
+
 function validateSchema(params) {
   validateArray(params);
   validateArray(params, AvailableTypes.Object, 'Object');
@@ -13,8 +19,24 @@ function validateSchema(params) {
     const row = params[i];
     const keys = Object.keys(row);
 
+    if (row.type === exceptionTypes.Object && (!row.schema || !row.schema.length)) {
+      throw new ValidateException('Prop \'schema\' is required when you choose type \'Object\'!')
+    }
+
+    if (row.type === exceptionTypes.Enum && (!row.enumOps || !row.enumOps.length)) {
+      throw new ValidateException('Prop \'enumOps\' is required when you choose type \'Enum\'!')
+    }
+
+    if (row.type === exceptionTypes.Object) {
+      validateSchema(row.schema)
+    }
+
+    if (row.type === exceptionTypes.Enum) {
+      validateArray(row.enumOps)
+    }
+
     for (const key of schema) {
-      validateEnum(key, keys, `Prop ${key} is missing on schema index ${i}!`);
+      validateEnum(key, keys, `Prop '${key}' is missing on schema index ${i}!`);
     }
   }
 
@@ -36,18 +58,28 @@ function validateSchema(params) {
  */
 function validateLine(entry, data, index = null) {
   if (entry.required && !data)
-    throw new ValidateException(`Field ${entry.name} is required${index ? ` - on index #${index}` : ''}!`)
-  
+    throw new ValidateException(
+      `Field ${entry.name} is required${index ? ` - on index #${index}` : ''}!`
+    );
+
   // Ignore type checking if doesn't have data and not required
-  if (!entry.required && !data) return null
+  if (!entry.required && !data) return null;
 
   // Checking type
-  let result = null
-  if (entry.type === "Enum") {
-    const { enumOps } = entry
-    result = AvailableTypes[entry.type](data, enumOps)
-  } else {
-    result = AvailableTypes[entry.type](data)
+  let result = null;
+
+  if (entry.type === exceptionTypes.Enum) {
+    const { enumOps } = entry;
+    result = AvailableTypes[entry.type](data, enumOps);
+  }
+
+  if (entry.type === exceptionTypes.Object) {
+    const { schema } = entry;
+    result = _validate(data, schema)
+  }
+
+  if (!Object.keys(exceptionTypes).includes(entry.type)) {
+    result = AvailableTypes[entry.type](data);
   }
 
   if (data && !result)
@@ -56,7 +88,7 @@ function validateLine(entry, data, index = null) {
         typeof index !== 'undefined' ? ` - on index #${index}` : ''
       }!`
     );
-  
+
   if (!entry.required && !data) return null;
 
   return typeof result !== 'boolean' ? result : data;
@@ -113,7 +145,6 @@ module.exports = {
        */
       validate: (input) => {
         let result;
-
 
         if (!input.length) {
           result = _validate(input, dto);
