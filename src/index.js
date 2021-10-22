@@ -3,52 +3,13 @@
 const schema = require('./utils/propsSchema');
 const AvailableTypes = require('./utils/types');
 const ValidateException = require('./exceptions/ValidateException');
-const { validateEnum, validateArray } = require('./utils/validators');
+const {
+  validateSchema,
+  validateArray,
+  validateEnum,
+  exceptionTypes,
+} = require('./utils/validators');
 
-const exceptionTypes = {
-  Enum: 'Enum',
-  Array: 'Array',
-  Object: 'Object'
-}
-
-function validateSchema(params) {
-  validateArray(params);
-  validateArray(params, AvailableTypes.Object, 'Object');
-
-  for (let i = 0; i < params.length; i++) {
-    const row = params[i];
-    const keys = Object.keys(row);
-
-    if (row.type === exceptionTypes.Object && (!row.schema || !row.schema.length)) {
-      throw new ValidateException('Prop \'schema\' is required when you choose type \'Object\'!')
-    }
-
-    if (row.type === exceptionTypes.Enum && (!row.enumOps || !row.enumOps.length)) {
-      throw new ValidateException('Prop \'enumOps\' is required when you choose type \'Enum\'!')
-    }
-
-    if (row.type === exceptionTypes.Object) {
-      validateSchema(row.schema)
-    }
-
-    if (row.type === exceptionTypes.Enum) {
-      validateArray(row.enumOps)
-    }
-
-    for (const key of schema) {
-      validateEnum(key, keys, `Prop '${key}' is missing on schema index ${i}!`);
-    }
-  }
-
-  const availableTypes = Object.keys(AvailableTypes);
-  const types = params.map((dt) => dt.type);
-
-  types.forEach((type) => {
-    if (!availableTypes.includes(type)) {
-      throw new ValidateException(`${type} was not recognized!`);
-    }
-  });
-}
 /**
  *
  * @param entry
@@ -75,7 +36,7 @@ function validateLine(entry, data, index = null) {
 
   if (entry.type === exceptionTypes.Object) {
     const { schema } = entry;
-    result = _validate(data, schema)
+    result = _validate(data, schema);
   }
 
   if (!Object.keys(exceptionTypes).includes(entry.type)) {
@@ -135,7 +96,7 @@ module.exports = {
    * @constructor
    */
   MakeDto: (params) => {
-    validateSchema(params);
+    validateSchema(params, validateArray, validateEnum, schema, AvailableTypes);
     const dto = params;
 
     return {

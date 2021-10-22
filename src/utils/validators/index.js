@@ -7,6 +7,7 @@ const { validateNumber } = require('./validateNumber');
 const { validateDate } = require('./validateDate');
 const { validateObject } = require('./validateObject');
 const { validateString } = require('./validateString');
+const { validateSchema, exceptionTypes } = require('./validateSchema');
 
 module.exports = {
   validateEnum,
@@ -16,4 +17,6 @@ module.exports = {
   validateDate,
   validateObject,
   validateString,
+  validateSchema,
+  exceptionTypes
 };
