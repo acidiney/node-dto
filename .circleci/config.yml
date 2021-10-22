@@ -10,7 +10,7 @@ orbs:
 jobs:
   coveralls:
     docker:
-      - image: circleci/node@4.7
+      - image: cimg/base:stable
     steps:
       - coveralls/upload
 
@@ -27,4 +27,6 @@ workflows:
           version: '16.10'
           # If you are using yarn, change the line below from "npm" to "yarn"
           pkg-manager: npm
-      - coveralls
+  upload-coverage:
+      jobs:
+        - coveralls
