@@ -93,7 +93,7 @@ console.log(CreateUserDto.entries()) // firstName, lastName, email
 ```
 You can use this, in `request.only` for example to retrive from request only this elements.
 
-## .validate(obj: Object)
+## .validate(obj: Object | array)
 
 The `.validate` function receive the current payload, validate with type and obrigatority and returns an serialized `object` or throws an `ValidateException`.
 
