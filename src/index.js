@@ -1,21 +1,20 @@
 'use strict';
 
-const schema = require('./utils/propsSchema')
+const schema = require('./utils/propsSchema');
 const AvailableTypes = require('./utils/types');
 const ValidateException = require('./exceptions/ValidateException');
-const { validateEnum, validateArray} = require('./utils/validators')
+const { validateEnum, validateArray } = require('./utils/validators');
 
 function validateSchema(params) {
-  validateArray(params)
+  validateArray(params);
   validateArray(params, AvailableTypes.Object, 'Object');
 
   for (let i = 0; i < params.length; i++) {
-
-    const row = params[i]
+    const row = params[i];
     const keys = Object.keys(row);
 
     for (const key of schema) {
-      validateEnum(key, keys, `Prop ${key} is missing on schema index ${i}!`)
+      validateEnum(key, keys, `Prop ${key} is missing on schema index ${i}!`);
     }
   }
 
@@ -32,11 +31,12 @@ function validateSchema(params) {
  *
  * @param entry
  * @param data
+ * @param index
  * @returns {null|boolean|*}
  */
-function validateLine(entry, data) {
+function validateLine(entry, data, index = null) {
   if (entry.required && !data)
-    throw new ValidateException(`Field ${entry.name} is required!`)
+    throw new ValidateException(`Field ${entry.name} is required${index ? ` - on index #${index}` : ''}!`)
   
   // Ignore type checking if doesn't have data and not required
   if (!entry.required && !data) return null
@@ -52,10 +52,41 @@ function validateLine(entry, data) {
 
   if (data && !result)
     throw new ValidateException(
-        `Field ${entry.name} with value ${data}, is not typeof ${entry.type}!`
+      `Field ${entry.name} with value ${data}, is not typeof ${entry.type}${
+        typeof index !== 'undefined' ? ` - on index #${index}` : ''
+      }!`
     );
+  
+  if (!entry.required && !data) return null;
 
-  return typeof result !== 'boolean' ? result : data
+  return typeof result !== 'boolean' ? result : data;
+}
+
+function _validate(input, dto, index = null) {
+  const keys = Object.keys(input);
+  const validated = {};
+
+  const requiredProps = dto.filter((d) => d.required).map((d) => d.name);
+
+  requiredProps.forEach((prop) => {
+    if (!keys.includes(prop)) {
+      throw new ValidateException(
+        `Field ${prop} is required${
+          typeof index !== 'undefined' ? ` - on index #${index}` : ''
+        }!`
+      );
+    }
+  });
+
+  for (const entry of dto) {
+    for (const key of keys) {
+      if (entry.name === key) {
+        validated[entry.serialize] = validateLine(entry, input[key], index);
+      }
+    }
+  }
+
+  return validated;
 }
 
 module.exports = {
@@ -77,22 +108,22 @@ module.exports = {
 
     return {
       /**
-       * @param {Object} input
-       * @returns {Object}
+       * @param {Object|Object[]} input
+       * @returns {Object|Object[]}
        */
       validate: (input) => {
-        const keys = Object.keys(input);
-        const validated = {};
+        let result;
 
-        for (const entry of dto) {
-          for (const key of keys) {
-            if (entry.name === key) {
-              validated[entry.serialize] = validateLine(entry, input[key]);
-            }
-          }
+
+        if (!input.length) {
+          result = _validate(input, dto);
         }
 
-        return validated;
+        if (input instanceof Array) {
+          result = input.map((row, idx) => _validate(row, dto, idx));
+        }
+
+        return result;
       },
 
       /**

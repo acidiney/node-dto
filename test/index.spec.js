@@ -75,7 +75,7 @@ describe('nodejs-dto', () => {
       Age: 'Acidiney',
     };
 
-    expect(() => dto.validate(requestProps)).to.throws();
+    expect(() => dto.validate(requestProps)).to.throws('Field Age with value Acidiney, is not typeof Number');
   });
 
   it('should validate all entries and returns a object with serialized data', () => {
@@ -246,4 +246,60 @@ describe('nodejs-dto', () => {
       "Value canceled don't exists on enum approved,pending,rejected!"
     );
   });
+  it ('should validate an array, and throws an error on index 1', () => {
+    const dto = MakeDto([
+      {
+        name: 'Age',
+        serialize: 'age',
+        type: 'Number',
+        required: true,
+      },
+      {
+        name: 'Name',
+        serialize: 'name',
+        type: 'String',
+        required: false,
+      },
+    ]);
+
+    expect(() => dto.validate([
+      {
+        Age: 32,
+        Name: 'John Doe'
+      },
+      {
+        Age: 'Jhon Doe',
+        Name: 32
+      }
+    ])).to.throw('Field Age with value Jhon Doe, is not typeof Number - on index #1!')
+
+  })
+
+  it ('should validate an array, and throws an because are missing Age on index #1', () => {
+    const dto = MakeDto([
+      {
+        name: 'Age',
+        serialize: 'age',
+        type: 'Number',
+        required: true,
+      },
+      {
+        name: 'Name',
+        serialize: 'name',
+        type: 'String',
+        required: false,
+      },
+    ]);
+
+    expect(() => dto.validate([
+      {
+        Age: 12,
+        Name: 'John Doe'
+      },
+      {
+        Name: 'Jhon Doe'
+      }
+    ])).to.throw('Field Age is required - on index #1!')
+
+  })
 });
