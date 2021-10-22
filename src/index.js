@@ -36,20 +36,28 @@ function validateSchema(params) {
  */
 function validateLine(entry, data, index = null) {
   if (entry.required && !data)
-    throw new ValidateException(
-      `Field ${entry.name} is required${index ? ` - on index #${index}` : ''}!`
-    );
+    throw new ValidateException(`Field ${entry.name} is required${index ? ` - on index #${index}` : ''}!`)
+  
+  // Ignore type checking if doesn't have data and not required
+  if (!entry.required && !data) return null
 
-  if (data && !AvailableTypes[entry.type](data))
+  // Checking type
+  let result = null
+  if (entry.type === "Enum") {
+    const { enumOps } = entry
+    result = AvailableTypes[entry.type](data, enumOps)
+  } else {
+    result = AvailableTypes[entry.type](data)
+  }
+
+  if (data && !result)
     throw new ValidateException(
       `Field ${entry.name} with value ${data}, is not typeof ${entry.type}${
         typeof index !== 'undefined' ? ` - on index #${index}` : ''
       }!`
     );
-
+  
   if (!entry.required && !data) return null;
-
-  const result = AvailableTypes[entry.type](data);
 
   return typeof result !== 'boolean' ? result : data;
 }

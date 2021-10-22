@@ -205,6 +205,47 @@ describe('nodejs-dto', () => {
     });
   })
 
+  it('should success to validate a dto type [Enum]', () => {
+    const dto = MakeDto([
+      {
+        name: 'status',
+        serialize: 'status',
+        type: 'Enum',
+        enumOps: ['approved', 'pending', 'rejected'],
+        required: true,
+      },
+    ]);
+
+    const requestProps = {
+      status: 'approved',
+    };
+
+    const props = {
+      status: 'approved',
+    };
+
+    expect(dto.validate(requestProps)).to.deep.equal(props);
+  });
+
+  it('should throw an error when pass a wrong value after validate a dto type [Enum]', () => {
+    const dto = MakeDto([
+      {
+        name: 'status',
+        serialize: 'status',
+        type: 'Enum',
+        enumOps: ['approved', 'pending', 'rejected'],
+        required: true,
+      },
+    ]);
+
+    const requestProps = {
+      status: 'canceled',
+    };
+
+    expect(() => dto.validate(requestProps)).to.throw(
+      "Value canceled don't exists on enum approved,pending,rejected!"
+    );
+  });
   it ('should validate an array, and throws an error on index 1', () => {
     const dto = MakeDto([
       {
