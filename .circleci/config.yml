@@ -10,7 +10,7 @@ orbs:
 jobs:
   coveralls:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/node:16
     steps:
       - coveralls/upload
 
