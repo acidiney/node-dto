@@ -10,7 +10,6 @@ function validateSchema(params) {
   validateArray(params, AvailableTypes.Object, 'Object');
   for (let i = 0; i < params.length; i++) {
     const row = params[i];
-    console.log(row)
     const keys = Object.keys(row);
       if((typeof row['defaultValue']).toLowerCase()!==row['type'].toLowerCase()){
         throw new ValidateException(
