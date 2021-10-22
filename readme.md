@@ -20,11 +20,29 @@ The `MakeDto` function receive an array of object with this schema:
 {
   name: String,
   serialize: String,
-  type: 'Number' | 'String' | 'Date' | 'Boolean',
+  type: 'Number' | 'String' | 'Date' | 'Boolean' | 'Enum',
   required: Boolean
 }
 ```
 Note: For type `Number` validator parses to Number Type in javascript check issue [Add Number Parsing for Number type](https://github.com/acidiney/node-dto/issues/6)
+
+### Enum
+
+For `Enum` type you need to pass a `enumOps` array props and specify, a list of accepted options.
+
+Eg.
+
+```js
+MakeDto([
+  {
+    name: 'opsStatus',
+    serialize: 'ops_status',
+    required: true,
+    type: 'Enum',
+    enumOps: ['pending', 'approved', 'rejected']
+  }
+]
+```
 
 ## Name
 
