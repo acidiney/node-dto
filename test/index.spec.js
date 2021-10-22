@@ -234,7 +234,7 @@ describe('nodejs-dto', () => {
 
   })
 
-  it ('should validate an array, and throws an because are missing Age on index 0', () => {
+  it ('should validate an array, and throws an because are missing Age on index #1', () => {
     const dto = MakeDto([
       {
         name: 'Age',
@@ -252,12 +252,13 @@ describe('nodejs-dto', () => {
 
     expect(() => dto.validate([
       {
+        Age: 12,
         Name: 'John Doe'
       },
       {
         Name: 'Jhon Doe'
       }
-    ])).to.throw('Field Age is required - on index #0!')
+    ])).to.throw('Field Age is required - on index #1!')
 
   })
 });

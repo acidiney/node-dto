@@ -43,7 +43,7 @@ function validateLine(entry, data, index = null) {
   if (data && !AvailableTypes[entry.type](data))
     throw new ValidateException(
       `Field ${entry.name} with value ${data}, is not typeof ${entry.type}${
-        index ? ` - on index #${index}` : ''
+        typeof index !== 'undefined' ? ` - on index #${index}` : ''
       }!`
     );
 
@@ -60,13 +60,11 @@ function _validate(input, dto, index = null) {
 
   const requiredProps = dto.filter((d) => d.required).map((d) => d.name);
 
-  console.log(requiredProps, keys)
-
   requiredProps.forEach((prop) => {
     if (!keys.includes(prop)) {
       throw new ValidateException(
         `Field ${prop} is required${
-          index ? ` - on index #${index}` : ''
+          typeof index !== 'undefined' ? ` - on index #${index}` : ''
         }!`
       );
     }
@@ -114,7 +112,6 @@ module.exports = {
         }
 
         if (input instanceof Array) {
-          console.log('ne')
           result = input.map((row, idx) => _validate(row, dto, idx));
         }
 
