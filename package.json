@@ -4,7 +4,10 @@
   "description": "A small dto lib for nodejs",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha --report spec"
+    "test": "mocha **/*.spec.js",
+    "test:watch": "npm run test -- --watch",
+    "test:coverage": "nyc --check-coverage --lines 100 --reporter=text mocha",
+    "test:coverage:html": "nyc --reporter=html --reporter=text mocha"
   },
   "keywords": [
     "node-dto",
@@ -19,7 +22,8 @@
   "devDependencies": {
     "chai": "^4.3.4",
     "git-commit-msg-linter": "^3.2.8",
-    "mocha": "^9.1.3"
+    "mocha": "^9.1.3",
+    "nyc": "^15.1.0"
   },
   "dependencies": {
     "node-exceptions": "^4.0.1"
