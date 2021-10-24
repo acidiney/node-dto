@@ -75,7 +75,7 @@ function _validate(input, dto, index = null) {
     for (const key of keys) {
       if (entry.name === key) {
         validated[entry.serialize] = validateLine(entry, input[key], index);
-        if('defaultValue' in entry && validated[entry.serialize]===null)
+        if(entry.defaultValue && validated[entry.serialize]===null)
           validated[entry.serialize]=entry.defaultValue;
       }
     }

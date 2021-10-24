@@ -1,4 +1,5 @@
 const ValidateException = require('../../exceptions/ValidateException');
+
 const { validateDefaultValue } = require('./validateDefaultValue');
 const exceptionTypes = {
   Enum: 'Enum',
