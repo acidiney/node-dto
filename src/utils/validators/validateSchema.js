@@ -1,5 +1,5 @@
 const ValidateException = require('../../exceptions/ValidateException');
-const ValidateDefaultValue = require('../../utils/validators/validateDefaultValue')
+const { validateDefaultValue } = require('./validateDefaultValue');
 const exceptionTypes = {
   Enum: 'Enum',
   Array: 'Array',
@@ -45,7 +45,7 @@ function validateSchema(params, validateArray, validateEnum, schema, AvailableTy
     }
     
     if('defaultValue' in row){
-      ValidateDefaultValue(row,i);
+      validateDefaultValue(row,i);
     }
 
     validateExceptions(row, validateArray, validateEnum, schema, AvailableTypes);
