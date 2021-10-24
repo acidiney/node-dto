@@ -20,24 +20,54 @@ const {
 function validateLine(entry, data, index = null) {
   if (entry.required && !data)
     throw new ValidateException(
-      `Field ${entry.name} is required${index ? ` - on index #${index}` : ''}!`
+      `Field ${entry.name} is required${
+        typeof index === 'number' ? ` - on index #${index}` : ''
+      }!`
     );
 
   // Ignore type checking if doesn't have data and not required
   if (!entry.required && !data) return null;
 
+  const strategy = {
+    [exceptionTypes.Enum]: (data, entry) => {
+      const { enumOps } = entry;
+
+      return AvailableTypes[entry.type](data, enumOps);
+    },
+    [exceptionTypes.Object]: (data, entry) => {
+      const { schema } = entry;
+      return _validate(data, schema);
+    },
+    [exceptionTypes.Array]: (data, entry) => {
+      let fn = strategy[entry.itemsType];
+
+      if (!fn) {
+        fn = AvailableTypes[entry.itemsType];
+      }
+
+      const result = validateArray(
+        data,
+        (d) => fn(d, { ...entry, type: entry.itemsType }),
+        entry.itemsType
+      );
+
+      let resultSerialized = [];
+
+      if (['Object'].includes(entry.itemsType)) {
+        for (const row of result) {
+          resultSerialized.push({})
+          for (const item of entry.schema) {
+            resultSerialized[resultSerialized.length - 1][item.serialize] = row[item.name];
+          }
+        }
+      }
+
+      return resultSerialized.length && resultSerialized || result;
+    },
+  };
+
   // Checking type
-  let result = null;
-
-  if (entry.type === exceptionTypes.Enum) {
-    const { enumOps } = entry;
-    result = AvailableTypes[entry.type](data, enumOps);
-  }
-
-  if (entry.type === exceptionTypes.Object) {
-    const { schema } = entry;
-    result = _validate(data, schema);
-  }
+  let result = strategy[entry.type] && strategy[entry.type](data, entry);
 
   if (!Object.keys(exceptionTypes).includes(entry.type)) {
     result = AvailableTypes[entry.type](data);
@@ -46,7 +76,7 @@ function validateLine(entry, data, index = null) {
   if (data && !result)
     throw new ValidateException(
       `Field ${entry.name} with value ${data}, is not typeof ${entry.type}${
-        typeof index !== 'undefined' ? ` - on index #${index}` : ''
+        typeof index === 'number' ? ` - on index #${index}` : ''
       }!`
     );
 
@@ -65,7 +95,7 @@ function _validate(input, dto, index = null) {
     if (!keys.includes(prop)) {
       throw new ValidateException(
         `Field ${prop} is required${
-          typeof index !== 'undefined' ? ` - on index #${index}` : ''
+          typeof index === 'number' ? ` - on index #${index}` : ''
         }!`
       );
     }
@@ -75,8 +105,9 @@ function _validate(input, dto, index = null) {
     for (const key of keys) {
       if (entry.name === key) {
         validated[entry.serialize] = validateLine(entry, input[key], index);
-        if(entry.defaultValue && validated[entry.serialize]===null)
-          validated[entry.serialize]=entry.defaultValue;
+
+        if (entry.defaultValue && validated[entry.serialize] === null)
+          validated[entry.serialize] = entry.defaultValue;
       }
     }
   }

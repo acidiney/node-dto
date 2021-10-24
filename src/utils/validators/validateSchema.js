@@ -1,5 +1,5 @@
 const ValidateException = require('../../exceptions/ValidateException');
-const AvailableTypes = require('../types')
+const AvailableTypes = require('../types');
 const exceptionTypes = {
   Enum: 'Enum',
   Array: 'Array',
@@ -9,9 +9,16 @@ const exceptionTypes = {
 const validateProp = {
   Enum: 'enumOps',
   Object: 'schema',
+  Array: 'itemsType',
 };
 
-function validateExceptions(row, validateArray, validateEnum, schema, AvailableTypes) {
+function validateExceptions(
+  row,
+  validateArray,
+  validateEnum,
+  schema,
+  AvailableTypes
+) {
   const prop = validateProp[row.type];
 
   if (prop) {
@@ -21,7 +28,35 @@ function validateExceptions(row, validateArray, validateEnum, schema, AvailableT
       );
 
     if (row.type === exceptionTypes.Object) {
-      validateSchema(row.schema, validateArray, validateEnum, schema, AvailableTypes);
+      validateSchema(
+        row.schema,
+        validateArray,
+        validateEnum,
+        schema,
+        AvailableTypes
+      );
+    }
+
+    if (row.type === exceptionTypes.Array) {
+
+      if (row.itemsType === exceptionTypes.Array) {
+        throw new ValidateException(
+          "Can't cambine type Array with itemsType Array!"
+        );
+      }
+
+      validateType(AvailableTypes, [row.itemsType]);
+
+      validateExceptions(
+        {
+          ...row,
+          type: row.itemsType,
+        },
+        validateArray,
+        validateEnum,
+        schema,
+        AvailableTypes
+      );
     }
 
     if (row.type === exceptionTypes.Enum) {
@@ -32,7 +67,13 @@ function validateExceptions(row, validateArray, validateEnum, schema, AvailableT
   return;
 }
 
-function validateSchema(params, validateArray, validateEnum, schema, AvailableTypes) {
+function validateSchema(
+  params,
+  validateArray,
+  validateEnum,
+  schema,
+  AvailableTypes
+) {
   validateArray(params);
   validateArray(params, AvailableTypes.Object, 'Object');
 
@@ -43,21 +84,36 @@ function validateSchema(params, validateArray, validateEnum, schema, AvailableTy
     for (const key of schema) {
       validateEnum(key, keys, `Prop '${key}' is missing on schema index ${i}!`);
     }
-    
-    if(row.defaultValue){
-      result =row.type==='Enum'?AvailableTypes[row.type](row.defaultValue,row.enumOps):AvailableTypes[row.type](row.defaultValue);
-      if(!result){
+
+    if (row.defaultValue) {
+      result =
+        row.type === 'Enum'
+          ? AvailableTypes[row.type](row.defaultValue, row.enumOps)
+          : AvailableTypes[row.type](row.defaultValue);
+      if (!result) {
         throw new ValidateException(
           `Value of the Field defaultValue is not of the type '${row.type}' on schema index ${i}!`
-      );
+        );
       }
     }
 
-    validateExceptions(row, validateArray, validateEnum, schema, AvailableTypes);
+    validateExceptions(
+      row,
+      validateArray,
+      validateEnum,
+      schema,
+      AvailableTypes
+    );
   }
 
+  validateType(
+    AvailableTypes,
+    params.map((dt) => dt.type)
+  );
+}
+
+function validateType(AvailableTypes, types) {
   const availableTypes = Object.keys(AvailableTypes);
-  const types = params.map((dt) => dt.type);
 
   types.forEach((type) => {
     if (!availableTypes.includes(type)) {
