@@ -1,5 +1,5 @@
 const ValidateException = require('../../exceptions/ValidateException');
-
+const ValidateDefaultValue = require('../../utils/validators/validateDefaultValue')
 const exceptionTypes = {
   Enum: 'Enum',
   Array: 'Array',
@@ -42,6 +42,10 @@ function validateSchema(params, validateArray, validateEnum, schema, AvailableTy
 
     for (const key of schema) {
       validateEnum(key, keys, `Prop '${key}' is missing on schema index ${i}!`);
+    }
+    
+    if('defaultValue' in row){
+      ValidateDefaultValue(row,i);
     }
 
     validateExceptions(row, validateArray, validateEnum, schema, AvailableTypes);
