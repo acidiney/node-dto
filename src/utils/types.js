@@ -6,6 +6,7 @@ const {
     validateDate,
     validateObject,
     validateEnum,
+    validateArray,
 } = require('./validators/index');
 
 module.exports = {
@@ -15,4 +16,5 @@ module.exports = {
   Boolean: (value) => validateBoolean(value),
   Object: (value) => validateObject(value),
   Enum: (value, options) => validateEnum(value, options),
+  Array: (value) => validateArray(value),
 };
