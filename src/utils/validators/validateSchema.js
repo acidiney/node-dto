@@ -1,5 +1,5 @@
 const ValidateException = require('../../exceptions/ValidateException');
-
+const AvailableTypes = require('../types')
 const exceptionTypes = {
   Enum: 'Enum',
   Array: 'Array',
@@ -42,6 +42,15 @@ function validateSchema(params, validateArray, validateEnum, schema, AvailableTy
 
     for (const key of schema) {
       validateEnum(key, keys, `Prop '${key}' is missing on schema index ${i}!`);
+    }
+    
+    if(row.defaultValue){
+      result =row.type==='Enum'?AvailableTypes[row.type](row.defaultValue,row.enumOps):AvailableTypes[row.type](row.defaultValue);
+      if(!result){
+        throw new ValidateException(
+          `Value of the Field defaultValue is not of the type '${row.type}' on schema index ${i}!`
+      );
+      }
     }
 
     validateExceptions(row, validateArray, validateEnum, schema, AvailableTypes);
