@@ -393,4 +393,38 @@ describe('nodejs-dto', () => {
     expect(dto.validate(requestProps)).to.deep.equal(expectOutput)
   })
 
+  it('should throw an error when type of the value in the defaultValue field does not match with the field type',()=>{
+    expect(() => MakeDto([
+      {
+        name: 'someDto',
+        type: 'Number',
+        serialize: 'some_dto',
+        required: true,
+        defaultValue: 'wrongType',  
+      }
+    ])).to.throws('Value of the Field defaultValue is not of the type \'Number\' on schema index 0!');
+  })
+
+  it('should successfully validate a dto with null value and return with that dto with default value', () => {
+    const dto = MakeDto([
+      {
+        name: 'status',
+        serialize: 'status',
+        type: 'Enum',
+        enumOps: ['approved','unknown','pending', 'rejected'],
+        defaultValue: 'unknown',
+        required: false,
+      },
+    ]);
+    
+    const requestProps = {
+      status: null,
+    };
+
+    const props = {
+      status: 'unknown',
+    };
+
+    expect(dto.validate(requestProps)).to.deep.equal(props);
+  })
 });
