@@ -21,7 +21,7 @@ The `MakeDto` function receive an array of object with this schema:
 {
   name: String,
   serialize: String,
-  type: 'Number' | 'String' | 'Date' | 'Boolean' | 'Enum' | 'Object',
+  type: 'Number' | 'String' | 'Date' | 'Boolean' | 'Enum' | 'Object' | 'Array',
   required: Boolean
 }
 ```
@@ -64,6 +64,65 @@ MakeDto([
         serialize: 'name',
         required: true,
         type: 'Number',
+      }
+    ]
+  }
+]
+```
+
+
+#### Array
+
+For `Array` type you need to pass a `itemsType` prop. The `itemsType` specify what will be type of `array` that will be validated.
+
+In case of using `Enum` or `Object` you need to pass as well the `enumOps` or `schema` prop too.
+
+Eg-
+
+```js
+MakeDto([
+  {
+    name: 'fields',
+    serialize: 'fields',
+    required: true,
+    type: 'Array',
+    itemsType: 'Number'
+  }
+]
+```
+
+or 
+
+
+```js
+MakeDto([
+  {
+    name: 'fields',
+    serialize: 'fields',
+    required: true,
+    type: 'Array',
+    itemsType: 'Enum',
+    enumOps: ['accepted', 'nullable']
+  }
+]
+```
+
+or 
+
+```js
+MakeDto([
+  {
+    name: 'fields',
+    serialize: 'fields',
+    required: true,
+    type: 'Array',
+    itemsType: 'Object',
+    schema: [
+      {
+        name: 'StatusCode',
+        serialize: 'status_code',
+        required: true,
+        type: 'Number'
       }
     ]
   }
