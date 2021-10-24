@@ -212,6 +212,78 @@ describe('nodejs-dto', () => {
     });
   });
 
+  it('should validate an date', () => {
+    const dto = MakeDto([
+      {
+        name: 'birthDay',
+        serialize: 'birth_day',
+        type: 'Date',
+        required: true,
+      },
+    ]);
+
+    expect(
+      dto.validate({
+        birthDay: new Date('2020-01-01'),
+      })
+    ).to.deep.equal({
+      birth_day: new Date('2020-01-01'),
+    });
+  });
+
+  it('should throws an error when date is invalid', () => {
+    const dto = MakeDto([
+      {
+        name: 'birthDay',
+        serialize: 'birth_day',
+        type: 'Date',
+        required: true,
+      },
+    ]);
+
+    expect(() =>
+      dto.validate({
+        birthDay: '01/13/2021',
+      })
+    ).to.throws('Field birthDay with value 01/13/2021, is not typeof Date');
+  });
+
+  it('should validate a type of boolean', () => {
+    const dto = MakeDto([
+      {
+        name: 'Notify',
+        serialize: 'notify',
+        type: 'Boolean',
+        required: true,
+      },
+    ]);
+
+    expect(
+      dto.validate({
+        Notify: true,
+      })
+    ).to.deep.equal({
+      notify: true,
+    });
+  });
+
+  it('should throws a error when pass another type that is not Boolean', () => {
+    const dto = MakeDto([
+      {
+        name: 'Notify',
+        serialize: 'notify',
+        type: 'Boolean',
+        required: true,
+      },
+    ]);
+
+    expect(
+      () => dto.validate({
+        Notify: 'Acidiney',
+      })
+    ).to.throws('Field Notify with value Acidiney, is not typeof Boolean');
+  });
+
   it("should throws an error when select type 'Enum' but enumOps is not founded", () => {
     expect(() =>
       MakeDto([
@@ -689,18 +761,10 @@ describe('nodejs-dto', () => {
     ]);
     expect(
       dto.validate({
-        status: [
-          'approved',
-          'pending',
-          'rejected',
-        ],
+        status: ['approved', 'pending', 'rejected'],
       })
     ).to.deep.equal({
-      status: [
-        'approved',
-        'pending',
-        'rejected',
-      ],
+      status: ['approved', 'pending', 'rejected'],
     });
   });
 });
