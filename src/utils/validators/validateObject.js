@@ -5,5 +5,5 @@
  * @type {{validateObject: (function(*): boolean)}}
  */
 module.exports = {
-    validateObject: (obj) => typeof obj === 'object'
-}
+  validateObject: (obj) => typeof obj === 'object',
+};

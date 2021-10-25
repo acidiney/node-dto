@@ -1,12 +1,12 @@
 'use strict';
 const {
-    validateString,
-    validateNumber,
-    validateBoolean,
-    validateDate,
-    validateObject,
-    validateEnum,
-    validateArray,
+  validateString,
+  validateNumber,
+  validateBoolean,
+  validateDate,
+  validateObject,
+  validateEnum,
+  validateArray,
 } = require('./validators/index');
 
 module.exports = {

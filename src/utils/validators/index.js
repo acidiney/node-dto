@@ -18,5 +18,5 @@ module.exports = {
   validateObject,
   validateString,
   validateSchema,
-  exceptionTypes
+  exceptionTypes,
 };

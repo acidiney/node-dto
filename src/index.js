@@ -55,14 +55,15 @@ function validateLine(entry, data, index = null) {
 
       if (['Object'].includes(entry.itemsType)) {
         for (const row of result) {
-          resultSerialized.push({})
+          resultSerialized.push({});
           for (const item of entry.schema) {
-            resultSerialized[resultSerialized.length - 1][item.serialize] = row[item.name];
+            resultSerialized[resultSerialized.length - 1][item.serialize] =
+              row[item.name];
           }
         }
       }
 
-      return resultSerialized.length && resultSerialized || result;
+      return (resultSerialized.length && resultSerialized) || result;
     },
   };
 
