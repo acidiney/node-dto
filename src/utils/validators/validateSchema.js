@@ -38,7 +38,6 @@ function validateExceptions(
     }
 
     if (row.type === exceptionTypes.Array) {
-
       if (row.itemsType === exceptionTypes.Array) {
         throw new ValidateException(
           "Can't cambine type Array with itemsType Array!"

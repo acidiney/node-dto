@@ -277,8 +277,8 @@ describe('nodejs-dto', () => {
       },
     ]);
 
-    expect(
-      () => dto.validate({
+    expect(() =>
+      dto.validate({
         Notify: 'Acidiney',
       })
     ).to.throws('Field Notify with value Acidiney, is not typeof Boolean');
