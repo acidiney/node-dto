@@ -18,7 +18,7 @@ const {
  * @returns {null|boolean|*}
  */
 function validateLine(entry, data, index = null) {
-  if (entry.required && !data)
+  if (entry.required && (data !== null && data !== undefined))
     throw new ValidateException(
       `Field ${entry.name} is required${
         typeof index === 'number' ? ` - on index #${index}` : ''
