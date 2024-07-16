@@ -1,5 +1,4 @@
-const ValidateException = require('../../exceptions/ValidateException');
-const AvailableTypes = require('../types');
+import { ValidateException } from '../../exceptions/validate_exception.mjs';
 const exceptionTypes = {
   Enum: 'Enum',
   Array: 'Array',
@@ -76,6 +75,10 @@ function validateSchema(
   validateArray(params);
   validateArray(params, AvailableTypes.Object, 'Object');
 
+  if (params.length === 0) {
+    throw new ValidateException('NO_SCHEMA_DEFINED_ERROR');
+  }
+
   for (let i = 0; i < params.length; i++) {
     const row = params[i];
     const keys = Object.keys(row);
@@ -121,7 +124,4 @@ function validateType(AvailableTypes, types) {
   });
 }
 
-module.exports = {
-  exceptionTypes,
-  validateSchema,
-};
+export { exceptionTypes, validateSchema };

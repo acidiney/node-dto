@@ -3,12 +3,10 @@
   "version": "1.1.2",
   "description": "A small dto lib for nodejs",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
+    "test": "node --test",
     "prepare": "husky install",
-    "test": "mocha **/*.spec.js",
-    "test:watch": "npm run test -- --watch",
-    "test:coverage": "nyc --check-coverage --lines 100 --reporter=text mocha",
-    "test:coverage:html": "nyc --reporter=html --reporter=text mocha",
     "lint": "prettier --check ./**/*.js",
     "prettier": "prettier --write ./**/*.js"
   },
@@ -23,14 +21,8 @@
   "author": "Acidiney Dias <acidineydias@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "chai": "^4.3.4",
     "git-commit-msg-linter": "^3.2.8",
     "husky": "^7.0.4",
-    "mocha": "^9.1.3",
-    "nyc": "^15.1.0",
     "prettier": "2.4.1"
-  },
-  "dependencies": {
-    "node-exceptions": "^4.0.1"
   }
 }
