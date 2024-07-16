@@ -1,4 +1,5 @@
 import { NodeDto } from './node_dto.mjs';
+import { TYPES } from './types.mjs';
 
 /**
  * Represents a schema for defining properties.
@@ -34,3 +35,4 @@ import { NodeDto } from './node_dto.mjs';
  */
 
 export const MakeDto = (params) => new NodeDto(params);
+export { TYPES };
