@@ -94,7 +94,7 @@ export class NodeDto {
         const result = validateArray(
           value,
           (d) => fn(d, { ...prop, type: entry.itemsType }),
-          prop.itemsType
+          prop.itemsType,
         );
 
         let resultSerialized = [];
@@ -255,10 +255,11 @@ export class NodeDto {
 
     for (const dt of this.#schema) {
       sql.push(
-        `${entity
-          ? `${entity}.${dt.serialize} as ${dt.name}`
-          : `${dt.serialize} as ${dt.name}`
-        }`
+        `${
+          entity
+            ? `${entity}.${dt.serialize} as ${dt.name}`
+            : `${dt.serialize} as ${dt.name}`
+        }`,
       );
     }
 
