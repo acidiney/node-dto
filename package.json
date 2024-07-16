@@ -45,7 +45,9 @@
     "lint": "prettier --check ./**/*.mjs",
     "format": "prettier --write ./**/*.mjs",
     "build": "babel src -d dist",
-    "release": "npm run build && np"
+    "release": "np",
+    "prepublish": "npm run build",
+    "postpublish": "rm -rf ./dist"
   },
   "np": {
     "message": "chore(release): %s",
