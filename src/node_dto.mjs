@@ -229,6 +229,9 @@ export class NodeDto {
 
       for (const key of keys) {
         const founded = this.#schema.find((dt) => dt.serialize === key);
+        if (!founded) {
+          continue;
+        }
         serialize[founded.name] = entry[key];
       }
 
@@ -252,10 +255,9 @@ export class NodeDto {
 
     for (const dt of this.#schema) {
       sql.push(
-        `${
-          entity
-            ? `${entity}.${dt.serialize} as ${dt.name}`
-            : `${dt.serialize} as ${dt.name}`
+        `${entity
+          ? `${entity}.${dt.serialize} as ${dt.name}`
+          : `${dt.serialize} as ${dt.name}`
         }`
       );
     }
