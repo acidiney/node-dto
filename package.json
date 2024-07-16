@@ -2,13 +2,13 @@
   "name": "node-dto",
   "version": "1.1.2",
   "description": "A small dto lib for nodejs",
-  "main": "src/index.js",
+  "main": "src/index.mjs",
   "type": "module",
   "scripts": {
     "test": "node --test",
     "prepare": "husky install",
-    "lint": "prettier --check ./**/*.js",
-    "prettier": "prettier --write ./**/*.js"
+    "lint": "prettier --check ./**/*.mjs",
+    "prettier": "prettier --write ./**/*.mjs"
   },
   "keywords": [
     "node-dto",

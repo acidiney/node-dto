@@ -1,7 +1,7 @@
 'use strict';
 
-import schemaProps from '../../utils/props_schema.mjs';
-import { validateArray } from '../../utils/validators/validate_array.mjs';
+import schemaProps from '../utils/props_schema.mjs';
+import { validateArray } from './validate_array.mjs';
 import { TYPES, validateType } from '../types.mjs';
 import { HANDLERS, specialTypes, validateSpecial } from '../types_handlers.mjs';
 

@@ -55,10 +55,13 @@ export class NodeDto {
   }
 
   #validateRow(prop, value) {
-    const valueNotDefined = value === null && value === undefined;
+    const valueNotDefined = value === null || value === undefined;
     // Ignore type checking if doesn't have value and not required
-    if (!prop.required && !valueNotDefined)
-      return { success: true, value: null };
+    if (!prop.required && valueNotDefined)
+      return {
+        success: true,
+        value: prop.defaultValue || prop.type === TYPES.BOOLEAN ? false : null,
+      };
 
     if (prop.required && valueNotDefined) {
       return {
@@ -191,25 +194,72 @@ export class NodeDto {
       input = [input];
     }
 
-    const result = input.map((row) => {
-      const output = this.#validate(row);
-      const withErrors = {};
-      const keys = Object.keys(output);
+    const result = input.map((row) => this.#validate(row));
+    const withErrors = [];
+
+    for (const row of result) {
+      const keys = Object.keys(row);
       for (const key of keys) {
-        if (!output[key].success) {
-          withErrors[key] = output[key].value;
+        if (!row[key].success) {
+          withErrors.push({ [key]: row[key].value[0] });
         }
       }
+    }
 
-      if (Object.keys(withErrors).length) {
-        return { success: false, value: withErrors };
-      }
-
-      return { success: true, value: this.#clean(output) };
-    });
+    if (withErrors.length) {
+      return { success: false, errors: withErrors };
+    }
 
     return isArray ? result : result[0];
   }
 
-  entries() { }
+  entries() {
+    return this.#schema.map((dt) => dt.name);
+  }
+
+  /**
+   *
+   * @param {object|object[]} data
+   * @returns {{}|{}[]}
+   */
+  export(data) {
+    const convert = (entry) => {
+      const keys = Object.keys(entry);
+      const serialize = {};
+
+      for (const key of keys) {
+        const founded = this.#schema.find((dt) => dt.serialize === key);
+        serialize[founded.name] = entry[key];
+      }
+
+      return serialize;
+    };
+
+    if (data instanceof Array) {
+      return data.map(convert);
+    }
+
+    return convert(data);
+  }
+
+  /**
+   *
+   * @param entity
+   * @returns {*[]}
+   */
+  exportUsingSQL(entity = null) {
+    const sql = [];
+
+    for (const dt of this.#schema) {
+      sql.push(
+        `${
+          entity
+            ? `${entity}.${dt.serialize} as ${dt.name}`
+            : `${dt.serialize} as ${dt.name}`
+        }`
+      );
+    }
+
+    return sql;
+  }
 }

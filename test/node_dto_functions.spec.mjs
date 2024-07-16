@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import { TYPES } from '../../src/v2/types.mjs';
-import { NodeDto } from '../../src/v2/node_dto.mjs';
+import { TYPES } from '../src/types.mjs';
+import { NodeDto } from '../src/node_dto.mjs';
 
 describe('NodeDto - Functions', () => {
   it('should throws when input inst numeric', () => {

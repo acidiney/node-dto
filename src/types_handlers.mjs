@@ -7,7 +7,7 @@ import {
   validateObject,
   validateEnum,
   validateArray,
-} from '../utils/validators/index.mjs';
+} from './validators/index.mjs';
 import { TYPES, validateType } from './types.mjs';
 import { validateSchema } from './validators/schema_validator.mjs';
 

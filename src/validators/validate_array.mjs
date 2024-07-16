@@ -19,8 +19,8 @@ export function validateArray(array, validateFn = null, validateKey = null) {
     if (!array.every((p) => validateFn(p))) {
       return {
         value: [
-          'SCHEMA_NOT_AN_ARRAY_ERROR',
-          `Schema need to be an array of ${validateKey}!`,
+          'SCHEMA_FUNCTION_REJECTS_ERROR',
+          `Schema function rejects ${validateKey}!`,
         ],
         success: false,
       };

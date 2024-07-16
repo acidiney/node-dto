@@ -8,8 +8,8 @@ export function validateEnum(data, options, customMessage = null) {
   if (!options.includes(data))
     return {
       success: false,
-      message: [
-        'INVALID_ENUM_ERROR',
+      value: [
+        'INVALID_ENUM_OPT_ERROR',
         customMessage ||
         `Value ${data} don't exists on enum ${options.join(',')}!`,
       ],

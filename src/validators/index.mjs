@@ -7,4 +7,3 @@ export { validateNumber } from './validate_number.mjs';
 export { validateDate } from './validate_date.mjs';
 export { validateObject } from './validate_object.mjs';
 export { validateString } from './validate_string.mjs';
-export { validateSchema, exceptionTypes } from './validate_schema.mjs';

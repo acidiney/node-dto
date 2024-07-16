@@ -7,7 +7,6 @@
 export function validateBoolean(value) {
   const isBoolean = typeof value === 'boolean';
 
-  console.log(value);
   return {
     success: isBoolean,
     value: isBoolean
