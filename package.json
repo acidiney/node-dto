@@ -1,13 +1,13 @@
 {
   "name": "node-dto",
-  "version": "2.0.0-0",
+  "version": "2.0.0-1",
   "description": "A small dto lib for nodejs",
   "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "import": "./src/index.mjs"
-    }
+    "require": "./dist/index.js",
+    "import": "./src/index.mjs"
   },
+  "main": "./dist/index.js",
+  "module": "./src/node_dto.mjs",
   "files": [
     "dist/index.js",
     "dist/node_dto.js",

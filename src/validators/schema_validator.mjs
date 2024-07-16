@@ -40,18 +40,6 @@ export const validateSchema = (schema) => {
     const keys = Object.keys(row);
 
     /**
-     * Validate type
-     */
-    validation = validateType(row.type);
-
-    if (!validation.success) {
-      return {
-        success: false,
-        value: validation.value,
-      };
-    }
-
-    /**
      * Validate required props
      */
     const missingProps = Array(...schemaProps).diff(keys);
@@ -65,6 +53,18 @@ export const validateSchema = (schema) => {
               `Prop '${key}' is required when you choose type '${row.type}'!`
           ),
         ],
+      };
+    }
+
+    /**
+     * Validate type
+     */
+    validation = validateType(row.type);
+
+    if (!validation.success) {
+      return {
+        success: false,
+        value: validation.value,
       };
     }
 
