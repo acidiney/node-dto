@@ -2,7 +2,6 @@
   "name": "node-dto",
   "version": "1.1.2",
   "description": "A small dto lib for nodejs",
-  "main": "dist/index.js",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -10,8 +9,35 @@
     }
   },
   "files": [
-    "dist",
-    "src"
+    "dist/index.js",
+    "dist/node_dto.js",
+    "dist/types.js",
+    "dist/types_handlers.js",
+    "dist/utils/props_schema.js",
+    "dist/validators/index.js",
+    "dist/validators/schema_validator.js",
+    "dist/validators/validate_array.js",
+    "dist/validators/validate_boolean.js",
+    "dist/validators/validate_date.js",
+    "dist/validators/validate_enum.js",
+    "dist/validators/validate_number.js",
+    "dist/validators/validate_object.js",
+    "dist/validators/validate_string.js",
+    "src/index.mjs",
+    "src/node_dto.mjs",
+    "src/types.mjs",
+    "src/types_handlers.mjs",
+    "src/utils/props_schema.mjs",
+    "src/validators/index.mjs",
+    "src/validators/schema_validator.mjs",
+    "src/validators/validate_array.mjs",
+    "src/validators/validate_boolean.mjs",
+    "src/validators/validate_date.mjs",
+    "src/validators/validate_enum.mjs",
+    "src/validators/validate_number.mjs",
+    "src/validators/validate_object.mjs",
+    "src/validators/validate_string.mjs",
+    "readme.md"
   ],
   "scripts": {
     "test": "node --test",
@@ -20,6 +46,12 @@
     "format": "prettier --write ./**/*.mjs",
     "build": "babel src -d dist",
     "release": "npm run build && np"
+  },
+  "np": {
+    "message": "chore(release): %s",
+    "tag": "latest",
+    "branch": "main",
+    "anyBranch": false
   },
   "keywords": [
     "node-dto",
