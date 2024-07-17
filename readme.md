@@ -20,8 +20,13 @@ The `MakeDto` function receive an array of object with this schema:
 ```
 {
   name: String,
-  serialize: String,
-  type: 'Number' | 'String' | 'Date' | 'Boolean' | 'Enum' | 'Object' | 'Array',
+  serialize: String,type: TYPES.STRING |
+    TYPES.NUMBER |
+    TYPES.DATE |
+    TYPES.BOOLEAN |
+    TYPES.OBJECT |
+    TYPES.ENUM |
+    TYPES.ARRAY,
   required: Boolean
 }
 ```
@@ -39,7 +44,7 @@ MakeDto([
     name: 'opsStatus',
     serialize: 'ops_status',
     required: true,
-    type: 'Enum',
+    type: TYPES.ENUM,
     enumOps: ['pending', 'approved', 'rejected']
   }
 ]
@@ -57,7 +62,7 @@ MakeDto([
     name: 'fields',
     serialize: 'fields',
     required: true,
-    type: 'Object',
+    type: TYPES.OBJECT,
     schema: [
       {
         name: 'Name',
@@ -85,7 +90,7 @@ MakeDto([
     name: 'fields',
     serialize: 'fields',
     required: true,
-    type: 'Array',
+    type: TYPES.ARRAY,
     itemsType: 'Number'
   }
 ]
@@ -100,8 +105,8 @@ MakeDto([
     name: 'fields',
     serialize: 'fields',
     required: true,
-    type: 'Array',
-    itemsType: 'Enum',
+    type: TYPES.ARRAY,
+    itemsType: TYPES.ENUM,
     enumOps: ['accepted', 'nullable']
   }
 ]
@@ -115,8 +120,8 @@ MakeDto([
     name: 'fields',
     serialize: 'fields',
     required: true,
-    type: 'Array',
-    itemsType: 'Object',
+    type: TYPES.ARRAY,
+    itemsType: TYPES.OBJECT,
     schema: [
       {
         name: 'StatusCode',
@@ -165,26 +170,26 @@ Eg:
 
 // CreateUserDto.js
 
-const { MakeDto } = require('node-dto')
+const { MakeDto, TYPES } = require('node-dto')
 
 module.exports = MakeDto([
   {
     name: 'firstName',
     serialize: 'first_name',
     required: true,
-    type: 'String'
+    type: TYPES.STRING
   },
   {
     name: 'lastName',
     serialize: 'last_name',
     required: true,
-    type: 'String'
+    type: TYPES.STRING
   },
   {
     name: 'email',
     serialize: 'email',
     required: true,
-    type: 'String'
+    type: TYPES.STRING
   }
 ])
 
@@ -210,19 +215,21 @@ module.exports = MakeDto([
     name: 'firstName',
     serialize: 'first_name',
     required: true,
-    type: 'String'
+    type: TYPES.STRING
   },
   {
     name: 'lastName',
     serialize: 'last_name',
     required: true,
-    type: 'String'
+    type: TYPES.STRING
+
   },
   {
     name: 'email',
     serialize: 'email',
     required: true,
-    type: 'String'
+    type: TYPES.STRING
+
   }
 ])
 
@@ -270,6 +277,91 @@ ValidateException: Field firstName with value 928292, is not valid!
 
 ```
 
+
+## .validateAsync(obj: Object | array)
+
+The `.validateAsync` function receive the current payload, validate with type and obrigatority and returns an serialized `object` or return `ValidationResult`.
+
+Eg.
+
+Dto:
+```js
+
+module.exports = MakeDto([
+  {
+    name: 'firstName',
+    serialize: 'first_name',
+    required: true,
+    type: TYPES.STRING
+  },
+  {
+    name: 'lastName',
+    serialize: 'last_name',
+    required: true,
+    type: TYPES.STRING
+
+  },
+  {
+    name: 'email',
+    serialize: 'email',
+    required: true,
+    type: TYPES.STRING
+
+  }
+])
+
+```
+
+Comes:
+```js
+
+CreateUserDto.validateAsync({
+  firstName: 'Acidiney',
+  lastName: 'Dias',
+  email: 'acidineydias@gmail.com'
+})
+
+```
+
+Returns:
+```
+
+{
+  success: true,
+  value: {
+    first_name: 'Acidiney',
+    last_name: 'Dias',
+    email: 'acidineydias@gmail.com'
+  }
+}
+
+```
+
+Or an exception when something is wrong:
+
+Comes:
+```js
+
+CreateUserDto.validateAsync({
+  firstName: 928292,
+  lastName: 'Dias',
+  email: 'acidineydias@gmail.com'
+})
+
+```
+
+Returns:
+```js
+{
+  success: false,
+  value: [
+    {
+      first_name: 'INVALID_STRING_ERROR'
+    }
+  ]
+}
+```
+
 ## .export(data: Object | Array)
 
 Sometimes you receive data from your database for exemple in one format like `snake_case` and you need tou transform to `camelCase`, in order to mantain your code more clean.
@@ -285,19 +377,22 @@ module.exports = MakeDto([
     name: 'firstName',
     serialize: 'first_name',
     required: true,
-    type: 'String'
+    type: TYPES.STRING
+
   },
   {
     name: 'lastName',
     serialize: 'last_name',
     required: true,
-    type: 'String'
+    type: TYPES.STRING
+
   },
   {
     name: 'email',
     serialize: 'email',
     required: true,
-    type: 'String'
+    type: TYPES.STRING
+
   }
 ])
 
