@@ -14,7 +14,7 @@ $ npm i node-dto
 
 # How use
 
-The `node-dto` package exports `MakeDto` function, that is a factory to generate your custom `Dto's`.
+The `node-dto` package exports `MakeDto` function, that is a factory to generate your custom `Dto's`  and `TYPES` enum to help you find all available types to use
 
 The `MakeDto` function receive an array of object with this schema:
 ```
