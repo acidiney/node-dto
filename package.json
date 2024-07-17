@@ -1,6 +1,6 @@
 {
   "name": "node-dto",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A small dto lib for nodejs",
   "exports": {
     "require": "./dist/index.js",
