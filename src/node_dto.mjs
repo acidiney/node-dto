@@ -196,21 +196,31 @@ export class NodeDto {
 
     const result = input.map((row) => this.#validate(row));
     const withErrors = [];
+    const withSuccess = []
+
 
     for (const row of result) {
       const keys = Object.keys(row);
+      withErrors.push({})
+      withSuccess.push({})
       for (const key of keys) {
         if (!row[key].success) {
-          withErrors.push({ [key]: row[key].value[0] });
+          withErrors[withErrors.length - 1] = { ...withErrors[withErrors.length - 1], [key]: row[key].value[0] };
+          continue
         }
+        withSuccess[withSuccess.length - 1] = { ...withSuccess[withSuccess.length - 1], [key]: row[key].value };
       }
     }
 
-    if (withErrors.length) {
+
+    if (withErrors.filter(f => Object.keys(f).length).length) {
       return { success: false, errors: withErrors };
     }
 
-    return isArray ? result : result[0];
+    return {
+      success: true,
+      value: isArray ? withSuccess : withSuccess[0]
+    }
   }
 
   entries() {
@@ -255,10 +265,9 @@ export class NodeDto {
 
     for (const dt of this.#schema) {
       sql.push(
-        `${
-          entity
-            ? `${entity}.${dt.serialize} as ${dt.name}`
-            : `${dt.serialize} as ${dt.name}`
+        `${entity
+          ? `${entity}.${dt.serialize} as ${dt.name}`
+          : `${dt.serialize} as ${dt.name}`
         }`,
       );
     }

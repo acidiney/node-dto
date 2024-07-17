@@ -155,4 +155,29 @@ describe('NodeDto - Functions', () => {
       Duplicate: true,
     });
   });
+
+  it('should pass when data is fine', () => {
+    const sut = new NodeDto([
+      {
+        name: 'Numeric',
+        type: TYPES.NUMBER,
+        required: true,
+        serialize: 'numeric',
+      },
+      {
+        name: 'Duplicate',
+        type: TYPES.BOOLEAN,
+        required: false,
+        defaultValue: false,
+        serialize: 'duplicate',
+      },
+    ]);
+
+    const output = sut.validateAsync({ Numeric: 123, Duplicate: false });
+
+    assert.deepStrictEqual(output, {
+      success: true,
+      value: { numeric: 123, duplicate: false },
+    });
+  });
 });
