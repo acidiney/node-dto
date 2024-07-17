@@ -217,8 +217,9 @@ export class NodeDto {
       }
     }
 
-    if (withErrors.filter((f) => Object.keys(f).length).length) {
-      return { success: false, errors: withErrors };
+    const errors = withErrors.filter((f) => Object.keys(f).length)
+    if (errors.length) {
+      return { success: false, errors };
     }
 
     return {
