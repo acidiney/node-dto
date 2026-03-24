@@ -241,7 +241,7 @@ Comes:
 CreateUserDto.validate({
   firstName: 'Acidiney',
   lastName: 'Dias',
-  email: 'acidineydias@gmail.com'
+  email: 'xpto@gmail.com'
 })
 
 ```
@@ -252,7 +252,7 @@ Returns:
 {
   first_name: 'Acidiney',
   last_name: 'Dias',
-  email: 'acidineydias@gmail.com'
+  email: 'xpto@gmail.com'
 }
 
 ```
@@ -265,7 +265,7 @@ Comes:
 CreateUserDto.validate({
   firstName: 928292,
   lastName: 'Dias',
-  email: 'acidineydias@gmail.com'
+  email: 'xpto@gmail.com'
 })
 
 ```
@@ -318,7 +318,7 @@ Comes:
 CreateUserDto.validateAsync({
   firstName: 'Acidiney',
   lastName: 'Dias',
-  email: 'acidineydias@gmail.com'
+  email: 'xpto@gmail.com'
 })
 
 ```
@@ -331,7 +331,7 @@ Returns:
   value: {
     first_name: 'Acidiney',
     last_name: 'Dias',
-    email: 'acidineydias@gmail.com'
+    email: 'xpto@gmail.com'
   }
 }
 
@@ -345,7 +345,7 @@ Comes:
 CreateUserDto.validateAsync({
   firstName: 928292,
   lastName: 'Dias',
-  email: 'acidineydias@gmail.com'
+  email: 'xpto@gmail.com'
 })
 
 ```
@@ -405,7 +405,7 @@ Comes:
 CreateUserDto.export({
   first_name: 'Acidiney',
   last_name: 'Dias',
-  email: 'acidineydias@gmail.com'
+  email: 'xpto@gmail.com'
 })
 
 // or
@@ -414,7 +414,7 @@ CreateUserDto.export([
   {
   first_name: 'Acidiney',
   last_name: 'Dias',
-  email: 'acidineydias@gmail.com'
+  email: 'xpto@gmail.com'
 },
 {
   first_name: 'Jhon',
@@ -430,7 +430,7 @@ Returns:
 {
   firstName: 'Acidiney',
   lastName: 'Dias',
-  email: 'acidineydias@gmail.com'
+  email: 'xpto@gmail.com'
 }
 
 ```
@@ -443,7 +443,7 @@ Or
   {
     firstName: 'Acidiney',
     lastName: 'Dias',
-    email: 'acidineydias@gmail.com'
+    email: 'xpto@gmail.com'
   },
   {
     firstName: 'Jhon',
